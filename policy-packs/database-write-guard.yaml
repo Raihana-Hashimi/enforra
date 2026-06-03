@@ -1,0 +1,46 @@
+version: 1
+defaults:
+  decision: block
+policies:
+  - id: block-production-customer-delete
+    priority: 10
+    description: Block deleting customers table in production
+    match:
+      tool: db.deleteTable
+    conditions:
+      all:
+        - field: args.table
+          operator: eq
+          value: customers
+        - field: context.environment
+          operator: eq
+          value: production
+    decision: block
+
+  # not demonstrated — customize tool names to match your database layer
+  # - id: allow-read-only-query
+  #   match:
+  #     tool: db.query
+  #   conditions:
+  #     - field: args.operation
+  #       operator: eq
+  #       value: select
+  #   decision: allow
+
+  # - id: approve-production-update
+  #   match:
+  #     tool: db.update
+  #   conditions:
+  #     - field: context.environment
+  #       operator: eq
+  #       value: production
+  #   decision: require_approval
+
+  # - id: log-non-production-write
+  #   match:
+  #     tool: db.update
+  #   conditions:
+  #     - field: context.environment
+  #       operator: neq
+  #       value: production
+  #   decision: log_only

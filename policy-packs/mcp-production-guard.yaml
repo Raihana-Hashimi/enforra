@@ -1,0 +1,67 @@
+version: 1
+defaults:
+  decision: block
+policies:
+  - id: block-shell-run-prod
+    description: Block shell run in production
+    match:
+      agent: mcp-agent
+      tool: mcp.shell.run
+    conditions:
+      - field: context.environment
+        operator: eq
+        value: production
+    decision: block
+
+  - id: allow-shell-run-non-prod
+    description: Allow shell run in non-production environments
+    match:
+      agent: mcp-agent
+      tool: mcp.shell.run
+    conditions:
+      - field: context.environment
+        operator: neq
+        value: production
+    decision: allow
+
+  - id: allow-safe-filesystem-read
+    description: Allow safe filesystem read operations containing /safe/
+    match:
+      agent: mcp-agent
+      tool: mcp.filesystem.read
+    conditions:
+      - field: args.path
+        operator: contains
+        value: /safe/
+    decision: allow
+
+  - id: require-approval-filesystem-write
+    description: Require approval for filesystem write operations
+    match:
+      agent: mcp-agent
+      tool: mcp.filesystem.write
+    decision: require_approval
+
+  - id: block-filesystem-delete
+    description: Block filesystem delete operations
+    match:
+      agent: mcp-agent
+      tool: filesystem.delete
+    decision: block
+
+  - id: block-unknown-mcp-servers
+    description: Block unknown MCP servers when args.approved is not true
+    match:
+      agent: mcp-agent
+    conditions:
+      - field: args.approved
+        operator: neq
+        value: true
+    decision: block
+
+  # not demonstrated — customize for low-risk tools you want to audit without blocking
+  # - id: log-low-risk-mcp-read
+  #   match:
+  #     agent: mcp-agent
+  #     tool: mcp.read
+  #   decision: log_only
