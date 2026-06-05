@@ -13,7 +13,7 @@ This roadmap covers the open source local runtime core.
 
 ## Near-term
 
-- [ ] More policy condition operators
+- [ ] More policy condition operator
 - [ ] `enforra init` CLI command to scaffold `.enforra/policies/` in any project
 - [ ] `enforra report` CLI command for human-readable audit summary from local JSONL
 - [ ] Expanded policy pack library: payments, database writes, filesystem, email, Slack, GitHub, package installs
