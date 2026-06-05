@@ -9,10 +9,10 @@ This roadmap covers the open source local runtime core.
 - [x] Policy simulation and testing
 - [x] Optional audit hash-chain integrity (tamper-evident)
 - [x] Framework integration examples (LangGraph, OpenAI Agents SDK, Vercel AI SDK, MCP)
+- [x] Published to npm (@enforra/sdk-node, @enforra/mcp, @enforra/cli) and PyPI (enforra)
 
 ## Near-term
 
-- [ ] Package publishing to npm and PyPI
 - [ ] More policy condition operators
 - [ ] `enforra init` CLI command to scaffold `.enforra/policies/` in any project
 - [ ] `enforra report` CLI command for human-readable audit summary from local JSONL
