@@ -64,10 +64,10 @@ async function runWithMockToolCall(toolName: string, args: Record<string, unknow
   return generateText({
     model: mockModel,
     tools: {
-      "filesystem.read": filesystemRead,
-      "terminal.run": terminalRun
+      filesystem_read: filesystemRead,
+      terminal_run: terminalRun
     },
-    maxSteps: 2,
+    maxSteps: 1,
     prompt: `Execute: ${toolName} with ${JSON.stringify(args)}`
   });
 }
@@ -76,7 +76,7 @@ async function runWithMockToolCall(toolName: string, args: Record<string, unknow
 async function main() {
   console.log("--- Scenario 1: Safe File Read (Allowed) ---");
   try {
-    const result = await runWithMockToolCall("filesystem.read", { path: "src/index.ts" });
+    const result = await runWithMockToolCall("filesystem_read", { path: "src/index.ts" });
     const fsResult = result.toolResults[0].result as EnforceToolCallResult<unknown>;
     console.log(`Tool Result Decision: ${fsResult.decision}`);
     console.log(`Tool Result Executed: ${fsResult.executed ? "yes" : "no"}`);
@@ -90,7 +90,7 @@ async function main() {
 
   console.log("\n--- Scenario 2: Sensitive File Read (Blocked) ---");
   try {
-    const result = await runWithMockToolCall("filesystem.read", { path: "/workspace/.env" });
+    const result = await runWithMockToolCall("filesystem_read", { path: "/workspace/.env" });
     const fsResult = result.toolResults[0].result as EnforceToolCallResult<unknown>;
     console.log(`Tool Result Decision: ${fsResult.decision}`);
     console.log(`Tool Result Executed: ${fsResult.executed ? "yes" : "no"}`);
@@ -104,7 +104,7 @@ async function main() {
 
   console.log("\n--- Scenario 3: Terminal command execution (Requires Approval) ---");
   try {
-    const result = await runWithMockToolCall("terminal.run", { command: "npm install express" });
+    const result = await runWithMockToolCall("terminal_run", { command: "npm install express" });
     const termResult = result.toolResults[0].result as EnforceToolCallResult<unknown>;
     console.log(`Tool Result Decision: ${termResult.decision}`);
     console.log(`Tool Result Executed: ${termResult.executed ? "yes" : "no"}`);

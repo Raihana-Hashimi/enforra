@@ -8,9 +8,13 @@ policies:
       agent: langgraph-agent
       tool: filesystem.read
     conditions:
-      - field: args.path
-        operator: not_contains
-        value: ".env"
+      all:
+        - field: args.path
+          operator: contains
+          value: "src/"
+        - field: args.path
+          operator: not_contains
+          value: ".env"
     decision: allow
 
   - id: require-approval-terminal
