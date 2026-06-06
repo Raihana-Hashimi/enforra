@@ -56,7 +56,7 @@ pnpm policy:test:openai-style
 
 **Demo policy:** [examples/mcp/mcp-coding-agent/policy.yaml](../../examples/mcp/mcp-coding-agent/policy.yaml)
 
-**Policy pack template:** [policy-packs/coding-agent-safe-defaults.yaml](../../policy-packs/coding-agent-safe-defaults.yaml)
+**Policy pack template:** [policy-packs/coding-agent-safe-defaults.yaml](../../policy-packs/coding-agent-safe-defaults.yaml) — not loaded by the commands above. It is provided as a reusable starter policy for this use case.
 
 ## Expected result
 

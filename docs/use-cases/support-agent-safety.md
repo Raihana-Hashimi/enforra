@@ -46,7 +46,7 @@ Python SDK equivalent: `python3 examples/quickstart/support-refund-python/exampl
 
 **Demo policy:** [policies/starter/support-agent.yaml](../../policies/starter/support-agent.yaml)
 
-**Policy pack:** [policy-packs/support-agent-controls.yaml](../../policy-packs/support-agent-controls.yaml)
+**Policy pack:** [policy-packs/support-agent-controls.yaml](../../policy-packs/support-agent-controls.yaml) — not loaded by the commands above. It is provided as a reusable starter policy for this use case.
 
 ## Expected result
 

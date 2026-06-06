@@ -1,9 +1,18 @@
-# Copy-ready coding agent policy. Tool names must match your application handlers.
-# Demo: pnpm demo:mcp-coding uses terminal.run / filesystem.* in examples/mcp/mcp-coding-agent/policy.yaml
-# This pack uses shell.run / file.read naming from policies/starter/coding-agent.yaml
+# Copy-ready coding agent policy pack.
+# Uses only Enforra v1 policy syntax.
+#
+# This pack is a starter template for the "Coding Agent Safety" use case.
+# It is not loaded by the demos directly.
+#
+# Related examples:
+# - examples/mcp/mcp-coding-agent/policy.yaml
+# - policies/starter/coding-agent.yaml
+
 version: 1
+
 defaults:
   decision: block
+
 policies:
   - id: block-env-read
     description: Block reading .env files
@@ -27,33 +36,15 @@ policies:
         value: "private_key"
     decision: block
 
-  - id: allow-repo-search
-    description: Allow repository search
-    match:
-      agent: coding-agent
-      tool: repo.search
-    decision: allow
-
-  - id: allow-workspace-read
-    description: Allow reading files in the workspace
-    match:
-      agent: coding-agent
-      tool: file.read
-    conditions:
-      - field: args.path
-        operator: contains
-        value: "/workspace/"
-    decision: allow
-
-  - id: approve-package-install
-    description: Require approval for package installation
+  - id: require-approval-package-install
+    description: Require approval before installing packages
     match:
       agent: coding-agent
       tool: package.install
     decision: require_approval
 
-  - id: approve-production-shell
-    description: Require approval for shell commands in production (not block)
+  - id: block-production-shell
+    description: Block shell commands in production
     match:
       agent: coding-agent
       tool: shell.run
@@ -61,7 +52,7 @@ policies:
       - field: context.environment
         operator: eq
         value: production
-    decision: require_approval
+    decision: block
 
   - id: block-file-delete
     description: Block deleting files
@@ -70,9 +61,24 @@ policies:
       tool: file.delete
     decision: block
 
-  # not demonstrated — wire a tool name such as git.push in your application
-  # - id: approve-git-push
+  - id: log-repository-search
+    description: Log normal read-only repository search activity
+    match:
+      agent: coding-agent
+      tool: repo.search
+    decision: log_only
+
+  # The task requests approval for git push or repository mutation if supported.
+  # No git.push-style tool exists in the current starter/demo policies.
+  # Add a rule like the example below if your application exposes such a tool.
+  #
+  # - id: require-approval-git-push
   #   match:
   #     agent: coding-agent
   #     tool: git.push
   #   decision: require_approval
+
+  # The task requests blocking dangerous delete patterns if supported.
+  # The current policy language cannot inspect filesystem path traversal,
+  # normalize paths, or detect arbitrary delete patterns.
+  # The pack therefore blocks file.delete entirely using supported syntax.

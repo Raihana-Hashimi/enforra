@@ -8,7 +8,6 @@ An agent may request `db.deleteTable`, `db.update`, or similar tools. In product
 
 ## What Enforra checks
 
-- `agent` (demo uses `ops-agent`)
 - `tool` (`db.deleteTable` in the runnable demo)
 - `args.table`
 - `context.environment`
@@ -39,7 +38,7 @@ pnpm demo:db-unsafe
 
 **Demo policy:** [policies/starter/db-delete-video.yaml](../../policies/starter/db-delete-video.yaml)
 
-**Policy pack:** [policy-packs/database-write-guard.yaml](../../policy-packs/database-write-guard.yaml)
+**Policy pack:** [policy-packs/database-write-guard.yaml](../../policy-packs/database-write-guard.yaml) — not loaded by the commands above. It is provided as a reusable starter policy for this use case.
 
 ## Expected result
 

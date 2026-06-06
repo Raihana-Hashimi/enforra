@@ -1,9 +1,22 @@
+# Copy-ready MCP production guard policy pack.
+# Uses only Enforra v1 policy syntax.
+#
+# This pack is a starter template for the "MCP Production Guard" use case.
+# It is not loaded by the demo directly.
+#
+# Related demo policy:
+# - policies/starter/mcp-tools.yaml
+# - pnpm demo:mcp-guard
+
 version: 1
+
 defaults:
+  # Unknown MCP tools are blocked by default.
   decision: block
+
 policies:
-  - id: block-shell-run-prod
-    description: Block shell run in production
+  - id: block-shell-run-production
+    description: Block MCP shell execution in production
     match:
       agent: mcp-agent
       tool: mcp.shell.run
@@ -13,28 +26,6 @@ policies:
         value: production
     decision: block
 
-  - id: allow-shell-run-non-prod
-    description: Allow shell run in non-production environments
-    match:
-      agent: mcp-agent
-      tool: mcp.shell.run
-    conditions:
-      - field: context.environment
-        operator: neq
-        value: production
-    decision: allow
-
-  - id: allow-safe-filesystem-read
-    description: Allow safe filesystem read operations containing /safe/
-    match:
-      agent: mcp-agent
-      tool: mcp.filesystem.read
-    conditions:
-      - field: args.path
-        operator: contains
-        value: /safe/
-    decision: allow
-
   - id: require-approval-filesystem-write
     description: Require approval for filesystem write operations
     match:
@@ -43,25 +34,30 @@ policies:
     decision: require_approval
 
   - id: block-filesystem-delete
-    description: Block filesystem delete operations
+    description: Block destructive filesystem delete operations
     match:
       agent: mcp-agent
       tool: filesystem.delete
     decision: block
 
-  - id: block-unknown-mcp-servers
-    description: Block unknown MCP servers when args.approved is not true
-    match:
-      agent: mcp-agent
-    conditions:
-      - field: args.approved
-        operator: neq
-        value: true
-    decision: block
-
-  # not demonstrated — customize for low-risk tools you want to audit without blocking
+  # The task calls for logging low-risk MCP tools.
+  # No dedicated low-risk MCP audit example is demonstrated in the repo.
+  # Example only — customize to match your MCP tool names.
+  #
   # - id: log-low-risk-mcp-read
   #   match:
   #     agent: mcp-agent
   #     tool: mcp.read
   #   decision: log_only
+
+  # The starter MCP policy includes approval gating using args.approved.
+  # Keep this example commented because approval metadata is application-defined.
+  #
+  # - id: require-approved-mcp-server
+  #   match:
+  #     agent: mcp-agent
+  #   conditions:
+  #     - field: args.approved
+  #       operator: eq
+  #       value: true
+  #   decision: allow

@@ -1,9 +1,23 @@
+# Copy-ready support agent policy pack.
+# Uses only Enforra v1 policy syntax.
+#
+# This pack is a starter template for the "Support Agent Safety" use case.
+# It is not loaded by the demo directly.
+#
+# Related demo policy:
+# - policies/starter/support-agent.yaml
+# - examples/quickstart/support-refund-node/policies/observe-policy.yaml
+# - pnpm demo:support-refund
+
 version: 1
+
 defaults:
+  # Unknown support actions are blocked by default.
   decision: block
+
 policies:
   - id: allow-small-refunds
-    description: Allow small refunds automatically
+    description: Allow low-risk refunds automatically
     match:
       agent: support-agent
       tool: stripe.refund
@@ -13,9 +27,8 @@ policies:
         value: 50
     decision: allow
 
-  - id: approve-medium-refunds
-    description: Require approval for medium refunds
-    priority: 20
+  - id: require-approval-medium-refunds
+    description: Require approval for refunds above the low-risk threshold
     match:
       agent: support-agent
       tool: stripe.refund
@@ -30,8 +43,7 @@ policies:
     decision: require_approval
 
   - id: block-large-refunds
-    description: Block large refunds
-    priority: 10
+    description: Block refunds above the maximum threshold
     match:
       agent: support-agent
       tool: stripe.refund
@@ -41,8 +53,8 @@ policies:
         value: 500
     decision: block
 
-  - id: block-account-deletion-production
-    description: Block account deletion in production
+  - id: block-customer-delete-production
+    description: Block customer/account deletion in production
     match:
       agent: support-agent
       tool: account.delete
@@ -52,20 +64,33 @@ policies:
         value: production
     decision: block
 
-  - id: approve-external-email
-    description: Require approval before sending external email
+  - id: allow-customer-delete-non-production
+    description: Allow customer/account deletion outside production
     match:
       agent: support-agent
-      tool: email.send
+      tool: account.delete
     conditions:
-      - field: args.recipient
-        operator: not_contains
-        value: "@example.com"
-    decision: require_approval
+      - field: context.environment
+        operator: neq
+        value: production
+    decision: allow
 
-  # not demonstrated — support refund demo does not call this tool
-  # - id: log-customer-lookup
+  # The task calls for logging customer reads.
+  # No customer-read tool is demonstrated in the support refund example.
+  # Example only — customize to match your application's lookup tool.
+  #
+  # - id: log-customer-read
   #   match:
   #     agent: support-agent
   #     tool: crm.lookup
   #   decision: log_only
+
+  # The task calls for allowing low-risk lookups.
+  # No lookup tool is demonstrated in the starter support demo.
+  # Example only — customize to match your application's lookup tool.
+  #
+  # - id: allow-low-risk-lookup
+  #   match:
+  #     agent: support-agent
+  #     tool: crm.lookup
+  #   decision: allow

@@ -38,7 +38,7 @@ pnpm policy:test:mcp-style
 
 **Demo policy:** [policies/starter/mcp-tools.yaml](../../policies/starter/mcp-tools.yaml)
 
-**Policy pack:** [policy-packs/mcp-production-guard.yaml](../../policy-packs/mcp-production-guard.yaml)
+**Policy pack (copy-ready template):** [policy-packs/mcp-production-guard.yaml](../../policy-packs/mcp-production-guard.yaml)— not loaded by the commands above. It is provided as a reusable starter policy for this use case.
 
 Example code: [examples/mcp/mcp-tool-guard](../../examples/mcp/mcp-tool-guard) uses `guardMcpTool` from `@enforra/mcp`.
 
