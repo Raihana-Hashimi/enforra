@@ -45,8 +45,8 @@ policies:
       tool: package.install
     decision: require_approval
 
-# Default behavior is block.
-# This rule highlights production shell commands as a protected action.
+  # Default behavior is block.
+  # This rule highlights production shell commands as a protected action.
   - id: block-production-shell
     description: Block shell commands in production
     match:
