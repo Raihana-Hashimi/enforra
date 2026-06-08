@@ -9,7 +9,7 @@ A support agent may call payment or CRM tools to issue refunds, update records, 
 ## What Enforra checks
 
 - `agent` (`support-agent`)
-- `tool` (`stripe.refund`, `account.delete`, `email.send`, and tools you define)
+- `tool` (`stripe.refund`, `account.delete`, and tools you define)
 - `args.amount`, `args.customerId`, `args.recipient`
 - `context.environment`
 
@@ -22,13 +22,6 @@ Runnable demo exercises `stripe.refund` only:
 | 20                  | `allow`            | yes           |
 | 250                 | `require_approval` | no            |
 | 1000                | `block`            | no            |
-
-The starter policy and [policy pack](../../policy-packs/support-agent-controls.yaml) also define:
-
-- `account.delete` in production → `block` (not shown in the refund demo loop)
-- `email.send` to non-`@example.com` recipients → `require_approval`
-
-A `log_only` customer lookup rule is included as a commented template in the policy pack; wire `crm.lookup` (or your tool name) in your application to use it. For `log_only` on read tools in another scenario, see `pnpm demo:mcp-github`.
 
 ## Run the example
 

@@ -13,6 +13,8 @@ version: 1
 defaults:
   decision: block
 
+# Default behavior is block.
+# This rule explicitly documents that secret file access should be blocked.
 policies:
   - id: block-env-read
     description: Block reading .env files
@@ -43,6 +45,8 @@ policies:
       tool: package.install
     decision: require_approval
 
+# Default behavior is block.
+# This rule highlights production shell commands as a protected action.
   - id: block-production-shell
     description: Block shell commands in production
     match:
