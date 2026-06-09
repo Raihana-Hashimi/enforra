@@ -40,6 +40,13 @@ policies:
       tool: filesystem.delete
     decision: block
 
+  - id: block-mcp-filesystem-delete
+    description: Block MCP-prefixed destructive filesystem delete operations
+    match:
+      agent: mcp-agent
+      tool: mcp.filesystem.delete
+    decision: block
+
   # The task calls for logging low-risk MCP tools.
   # No dedicated low-risk MCP audit example is demonstrated in the repo.
   # Example only — customize to match your MCP tool names.
